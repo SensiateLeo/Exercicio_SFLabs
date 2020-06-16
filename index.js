@@ -65,7 +65,7 @@ let users = [{
     "empresas": [],
 }]
 
-// Setando o PORT para utilização 
+// Setando o PORT para utilização
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
@@ -126,7 +126,7 @@ app.post('/api/users/', (req,res) => {
         email: req.body.email,
         cpf: req.body.cpf,
         role: String(req.body.role),
-        empresa: req.body.empresa
+        empresas: req.body.empresas
     };
     //cria o usuário
     users.push(user);
@@ -140,7 +140,7 @@ app.get('/api/users/:_id', (req,res) =>{
     if(!user){
         res.status(404).send('O usuário com o ID informado não foi encontrado!');
         return;
-    } 
+    }
 
     //retorna usuário
     res.send(user);
@@ -153,7 +153,7 @@ app.put('/api/users/:_id', (req,res) =>{
     if(!user){
         res.status(404).send('O usuário com o ID informado não foi encontrado!');
         return;
-    } 
+    }
 
     //valida novos valores
     const { error } = Joi.validate(req.body, schemaUser); //result.error
@@ -162,14 +162,14 @@ app.put('/api/users/:_id', (req,res) =>{
         res.status(400).send(error.details[0].message);
         return;
     }
-
+    
     //grava alteração
     user._id = req.body._id,
     user.nome = req.body.nome,
     user.email = req.body.email,
     user.cpf = req.body.cpf,
     user.role = String(req.body.role),
-    user.empresa = req.body.empresa
+    user.empresas = req.body.empresas
     res.send(user);
 
 });
@@ -181,8 +181,8 @@ app.delete('/api/users/:_id', (req,res) => {
     if(!user){
         res.status(404).send('O usuário com o ID informado não foi encontrado!');
         return;
-    } 
-    
+    }
+
     //remove usuário
     const index = users.indexOf(user);
     users.splice(index,1);
@@ -203,7 +203,7 @@ app.get('/api/empresas', (req,res) =>{
 app.post('/api/empresas/', (req,res) => {
 
     //valida as entradas
-    const { error } = Joi.validate(req.body, schemaEmpresa); 
+    const { error } = Joi.validate(req.body, schemaEmpresa);
     if(error){
         //400 Bad Request
         res.status(400).send(error.details[0].message);
@@ -234,7 +234,7 @@ app.get('/api/empresas/:_id', (req,res) =>{
     if(!empresa){
         res.status(404).send('A empresa informada não foi encontrada!');
         return;
-    } 
+    }
 
     //retorna empresa
     res.send(empresa);
@@ -247,7 +247,7 @@ app.put('/api/empresas/:_id', (req,res) =>{
     if(!empresa){
         res.status(404).send('A empresa informada não foi encontrada!');
         return;
-    } 
+    }
 
     //valida novos valores
     const { error } = Joi.validate(req.body, schemaEmpresa); //result.error
@@ -268,7 +268,7 @@ app.put('/api/empresas/:_id', (req,res) =>{
     empresa.estado = req.body.estado,
     empresa.users = req.body.users,
     empresa.empresa = req.body.empresa
-    
+
     res.send(empresa);
 
 });
@@ -280,8 +280,8 @@ app.delete('/api/empresas/:_id', (req,res) => {
     if(!empresa){
         res.status(404).send('A empresa informada não foi encontrada!');
         return;
-    } 
-    
+    }
+
     //remove empresa
     const index = empresas.indexOf(empresa);
     empresas.splice(index,1);
@@ -300,7 +300,7 @@ app.get('/api/empresas/:_id/users', (req,res) =>{
     if(!empresa){
         res.status(404).send('A empresa informada não foi encontrada!');
         return;
-    } 
+    }
 
     const users = empresa.users;
 
@@ -309,12 +309,12 @@ app.get('/api/empresas/:_id/users', (req,res) =>{
 
 //Mostra UM usuário da empresa
 app.get('/api/empresas/:_id1/users/:_id2', (req,res) => {
-    //encontra a empresa    
+    //encontra a empresa
     const empresa = empresas.find(c => c._id === (req.params._id1));
     if(!empresa){
         res.status(404).send(`A empresa informada não foi encontrada!`);
         return;
-    } 
+    }
 
     //usuarios da empresa
     const users_empresa = empresa.users;
@@ -324,7 +324,7 @@ app.get('/api/empresas/:_id1/users/:_id2', (req,res) => {
     if(!usuario){
         res.status(404).send('O usuário informado não está registrado na empresa!');
         return;
-    } 
+    }
 
     //Mostra usuário
     res.send(usuario);
@@ -337,7 +337,7 @@ app.put('/api/empresas/:_id/users', (req,res) =>{
     if(!empresa){
         res.status(404).send('A empresa informada não foi encontrada!');
         return;
-    } 
+    }
 
     const users_empresa = empresa.users;
 
@@ -365,12 +365,12 @@ app.put('/api/empresas/:_id/users', (req,res) =>{
 
 //Removendo um user da Empresa
 app.delete('/api/empresas/:_id1/users/:_id2', (req,res) => {
-    //encontra a empresa    
+    //encontra a empresa
     const empresa = empresas.find(c => c._id === (req.params._id1));
     if(!empresa){
         res.status(404).send(`A empresa informada não foi encontrada!`);
         return;
-    } 
+    }
 
     //usuarios da empresa
     const users_empresa = empresa.users;
@@ -380,8 +380,8 @@ app.delete('/api/empresas/:_id1/users/:_id2', (req,res) => {
     if(!usuario){
         res.status(404).send('O usuário informado não está registrado na empresa!');
         return;
-    } 
-    
+    }
+
     //remove usuario
     const index = users_empresa.indexOf(usuario);
     users_empresa.splice(index,1);
@@ -398,7 +398,7 @@ app.get('/api/empresas/:_id/plantas', (req,res) =>{
     if(!empresa){
         res.status(404).send('A empresa informada não foi encontrada!');
         return;
-    } 
+    }
 
     const plantas = empresa.empresa;
 
@@ -407,12 +407,12 @@ app.get('/api/empresas/:_id/plantas', (req,res) =>{
 
 //Mostra UMA planta da empresa
 app.get('/api/empresas/:_id1/plantas/:_id2', (req,res) => {
-    //encontra a empresa    
+    //encontra a empresa
     const empresa = empresas.find(c => c._id === (req.params._id1));
     if(!empresa){
         res.status(404).send(`A empresa informada não foi encontrada!`);
         return;
-    } 
+    }
 
     //plantas da empresa
     const plantas_empresa = empresa.empresa;
@@ -422,7 +422,7 @@ app.get('/api/empresas/:_id1/plantas/:_id2', (req,res) => {
     if(!planta){
         res.status(404).send('A planta informada não está registrada na empresa!');
         return;
-    } 
+    }
 
     //Mostra planta
     res.send(planta);
@@ -435,7 +435,7 @@ app.put('/api/empresas/:_id/plantas', (req,res) =>{
     if(!empresa){
         res.status(404).send('A empresa informada não foi encontrada!');
         return;
-    } 
+    }
 
     const plantas_empresa = empresa.empresa;
 
@@ -458,12 +458,12 @@ app.put('/api/empresas/:_id/plantas', (req,res) =>{
 
 //Removendo um user da Empresa
 app.delete('/api/empresas/:_id1/plantas/:_id2', (req,res) => {
-    //encontra a empresa    
+    //encontra a empresa
     const empresa = empresas.find(c => c._id === (req.params._id1));
     if(!empresa){
         res.status(404).send(`A empresa informada não foi encontrada!`);
         return;
-    } 
+    }
 
     //plantas da empresa
     const plantas_empresa = empresa.empresa;
@@ -473,8 +473,8 @@ app.delete('/api/empresas/:_id1/plantas/:_id2', (req,res) => {
     if(!planta){
         res.status(404).send('A planta informada não está registrada na empresa!');
         return;
-    } 
-    
+    }
+
     //remove planta
     const index = plantas_empresa.indexOf(planta);
     plantas_empresa.splice(index,1);
